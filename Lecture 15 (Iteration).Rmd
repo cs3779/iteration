@@ -1,5 +1,5 @@
 ---
-title: "Lecture 15 (Iteration)"
+title: "Lecture 15 (Iteration) - Writing Functions"
 author: "CJ Snyder"
 date: "10/24/2019"
 output: html_document
@@ -8,5 +8,91 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
+library(rvest)
+library(p8105.datasets)
+set.seed(1)
 ```
+
+# My First Function, but first some foundations...
+```{r}
+
+x = rnorm(n = 30, mean = 4, sd = 2.3)
+
+x_again = rnorm(n = 30, mean = 6, sd = 0.3)
+
+y = rnorm(n = 30, mean = 8, sd = 1.6)
+
+
+(x - mean(x)) / sd(x)
+
+(x_again - mean(x_again)) / sd(x_again)
+
+(y - mean(y)) / sd(y)
+
+```
+
+## Actual Function...
+```{r}
+z_score = function(x) {
+  (x - mean(x)) / sd(x)
+}
+
+z_score(x)
+z_score(x_again)
+z_score(y)
+
+```
+
+```{r, error=TRUE}
+z_score(3)
+
+z_score("my name is not Jeff")
+
+z_score(x=c(TRUE, TRUE, TRUE, FALSE))
+# Actually works cause R can convert T/F to numeric
+
+z_score(x=iris)
+```
+
+### Editing the Function with Conditions
+```{r}
+z_score = function(x) {
+  if (!is.numeric(x)) {
+    stop("Argument should be Numeric")
+  } else if (length(x<3)) {
+    stop("X should be Less than 3")
+  }
+  (x - mean(x)) / sd(x)
+}
+```
+
+# Multiple Outputs
+```{r}
+mean_and_sd = function(input_x) {
+   if (!is.numeric(input_x)) {
+    stop("Argument should be Numeric")
+  } else if (length(input_x) < 3) {
+    stop("X should be Less than 3")
+  }
+  tibble(
+  mean_input=mean(input_x),
+  sd_input=sd(input_x)
+  )
+}
+```
+
+testing..
+```{r}
+mean_and_sd(x)
+mean_and_sd(y)
+```
+
+
+
+
+
+
+
+
+
 
