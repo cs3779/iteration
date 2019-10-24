@@ -542,6 +542,50 @@ beta1_hat = coef(ls_fit)[2]
 ## 1      2.00      3.00</code></pre>
 </div>
 </div>
+<div id="scrape-lots-of-info-from-amazon" class="section level1">
+<h1>Scrape lots of info from Amazon</h1>
+<pre class="r"><code>read_page_reviews &lt;- function(url) {
+  
+  h = read_html(url)
+  
+  review_titles = h %&gt;%
+    html_nodes(&quot;#cm_cr-review_list .review-title&quot;) %&gt;%
+    html_text()
+  
+  review_stars = h %&gt;%
+    html_nodes(&quot;#cm_cr-review_list .review-rating&quot;) %&gt;%
+    html_text() %&gt;%
+    str_extract(&quot;\\d&quot;) %&gt;%
+    as.numeric()
+  
+  review_text = h %&gt;%
+    html_nodes(&quot;.review-data:nth-child(4)&quot;) %&gt;%
+    html_text()
+  
+  tibble(
+    title = review_titles,
+    stars = review_stars,
+    text = review_text
+  )
+}</code></pre>
+<div id="testing-new-function" class="section level2">
+<h2>Testing New Function</h2>
+<pre class="r"><code>read_page_reviews(&quot;https://www.amazon.com/product-reviews/B00005JNBQ/ref=cm_cr_arp_d_viewopt_rvwer?ie=UTF8&amp;reviewerType=avp_only_reviews&amp;sortBy=recent&amp;pageNumber=1&quot;)</code></pre>
+<pre><code>## # A tibble: 10 x 3
+##    title                               stars text                          
+##    &lt;chr&gt;                               &lt;dbl&gt; &lt;chr&gt;                         
+##  1 &quot;Great movie\n            &quot;             5 Format: Blu-rayVerified Purch~
+##  2 &quot;Duh\n            &quot;                     5 Format: Prime VideoVerified P~
+##  3 &quot;Great video\n            &quot;             5 Format: DVDVerified Purchase  
+##  4 &quot;Give me some of your tots\n      ~     5 Format: Prime VideoVerified P~
+##  5 &quot;Nostalgic\n            &quot;               5 Format: Prime VideoVerified P~
+##  6 &quot;Make you giggle type movie\n     ~     5 Format: Blu-rayVerified Purch~
+##  7 &quot;This movie is so stupid.\n       ~     5 Format: Prime VideoVerified P~
+##  8 &quot;Hilarious\n            &quot;               5 Format: Prime VideoVerified P~
+##  9 &quot;Waste of money\n            &quot;          1 Format: Prime VideoVerified P~
+## 10 &quot;Good movie\n            &quot;              5 Format: Prime VideoVerified P~</code></pre>
+</div>
+</div>
 
 
 
