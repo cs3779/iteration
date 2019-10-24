@@ -87,6 +87,59 @@ mean_and_sd(x)
 mean_and_sd(y)
 ```
 
+# Multiple Inputs
+```{r}
+sim_data = tibble(
+  x = rnorm(30, mean = 1, sd = 1),
+  y = 2 + 3 * x + rnorm(30, 0, 1)
+)
+
+ls_fit = lm(y ~ x, data = sim_data)
+  
+beta0_hat = coef(ls_fit)[1]
+# Estimated Intercept
+beta1_hat = coef(ls_fit)[2]
+# Estimated slope
+```
+
+# Sim Regression
+```{r}
+sim_regression = function(n, beta0 = 2, beta1 = 3) {
+  
+  sim_data = tibble(
+    x = rnorm(n, mean = 1, sd = 1),
+    y = beta0 + beta1 * x + rnorm(n, 0, 1)
+  )
+  
+  ls_fit = lm(y ~ x, data = sim_data)
+  
+  tibble(
+    beta0_hat = coef(ls_fit)[1],
+    beta1_hat = coef(ls_fit)[2]
+  )
+}
+```
+
+## Testing Sim Regression
+```{r}
+sim_regression(15, beta0 = 3, beta1 = 4)
+sim_regression(30, beta0 = 3, beta1 = 4)
+sim_regression(60, beta0 = 2, beta1 = 5)
+sim_regression(4000, beta0 = 3, beta1 = 6)
+sim_regression(100000, 25.6, 30)
+sim_regression(100000)
+```
+
+
+
+
+
+
+
+
+
+
+
 
 
 
